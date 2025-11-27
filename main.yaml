@@ -1,5 +1,5 @@
 - name: "install {{component}}"
-  hosts: mongodb.aws76s.online 
+  hosts: "{{component}}"
   become: yes 
   vars_files:
   - variables.yaml
