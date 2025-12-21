@@ -1,0 +1,44 @@
+---
+# ---------- SSH & Ansible stability ----------
+- name: Install OpenSSH server (required for sftp)
+  ansible.builtin.yum:
+    name: openssh-server
+    state: present
+
+- name: Ensure sshd is running
+  ansible.builtin.service:
+    name: sshd
+    state: started
+    enabled: yes
+
+# ---------- Base utilities ----------
+- name: Install common utilities
+  ansible.builtin.yum:
+    name:
+      - curl
+      - wget
+      - unzip
+      - git
+      - net-tools
+      - bind-utils
+    state: present
+
+# ---------- Roboshop user ----------
+- name: Create roboshop user
+  ansible.builtin.user:
+    name: roboshop
+    shell: /bin/bash
+
+# ---------- App directory ----------
+- name: Remove old /app directory
+  ansible.builtin.file:
+    path: /app
+    state: absent
+
+- name: Create /app directory
+  ansible.builtin.file:
+    path: /app
+    state: directory
+    owner: roboshop
+    group: roboshop
+    mode: "0755"
